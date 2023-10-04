@@ -1,0 +1,35 @@
+.container {
+    display: flex;
+}
+
+.row {
+    display: flex;
+    margin: 5px;
+}
+
+.inp {
+    width: 250px; height: 20px;
+    margin-right: 0px;
+    border: 1px solid;
+}
+
+.row > textarea {
+    width: 251px;
+    padding-bottom: 10px;
+    border: 1px solid;
+}
+
+.row label:first-child {
+    width: 130px;
+}
+
+button {
+    background-color: dodgerblue;
+    border: none;
+    padding: 10px;
+    color: white;
+}
+
+.button_container {
+    margin-left: 135px;
+}

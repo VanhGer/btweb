@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title>21020051-PhamGiaVietAnh</title>
+</head>
+<body>
+    <div class="container">
+        <form>
+            <div class = "row">
+                <label for="name">Họ tên:</label>
+                <input class = "inp" style="background-color: aqua" type="text" id="name" name="name"><br>
+            </div>
+            
+            <div class="row">
+                <label for="address">Địa chỉ: </label>
+                <input class = "inp" style="background-color:lightgrey" type="text" id="address" name="address">
+            </div>
+            
+            <div class="row">
+                <label for="sex"> Giới tính:</label>
+                <div class = "sub_row">
+                    <label for="male">Nam</label>
+                    <input type="radio" id="male" name="sex" value="Nam">
+
+                    <label for="female">Nữ</label>
+                    <input type="radio" id="female" name="sex" value="Nữ">
+                </div>
+            </div>
+
+            <div class = "row">
+                <label for="birth">Ngày sinh:</label>
+                <input class = "inp" style="background-color: aqua" type="text" id="birth" name="birth" placeholder="nn/tt/nnnn">
+            </div>
+
+            <div class = "row">
+                <label for="email">E-mail:</label>
+                <input class = "inp" style="background-color: aqua" type="text" id="email" name="email">
+            </div>
+
+            <div class = "row">
+                <label for="phone">Điện thoại:</label>
+                <input class = "inp" style="background-color:lightgrey" type="text" id="phone" name="phone">
+            </div>
+
+            <div class = "row">
+                <label for="course">Khoá đăng ký:</label>
+                <input type = "checkbox" id="english" name="course" value="english"> 
+                <label for="english"> Tiếng Anh</label>
+
+                <input type = "checkbox" id="manage" name="course" value="manage"> 
+                <label for="manage">Quản trị</label>
+
+                <input type = "checkbox" id="it" name="course" value="it"> 
+                <label for="it"> CNTT</label>
+            </div>
+
+            <div class = "row">
+                <label for="userName">Tên sử dụng:</label>
+                <input class = "inp" style="background-color: aqua;" type="text" id="userName" name="userName">
+            </div>
+
+            <div class = "row">
+                <label for="password">Mật khẩu: </label>
+                <input class = "inp" style="background-color:lightgrey" type="password" id="password" name="password">
+            </div>
+
+            <div class = "row">
+                <label for="repassword">Gõ lại mật khẩu: </label>
+                <input class = "inp" style="background-color:lightgrey" type="password" id="repassword" name="repassword">
+            </div>
+
+            <div class = "row" style="padding-bottom: 20px;">
+                <label for="note">Ghi chú:</label>
+                <textarea  style="background-color:lightgrey" id="note" name="note"></textarea>
+            </div>
+
+            <div class = "row">
+                <label for="imgfile">Ảnh chân dung:</label>
+                <input  type="file" id="imgfile" name="imgfile" accept="image/*">
+            </div>
+
+            <div class = "button_container">
+                <button type="submit"> Chấp nhận</button>
+                <button type="reset"> Bỏ qua</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
