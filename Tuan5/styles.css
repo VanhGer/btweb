@@ -1,0 +1,39 @@
+form {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    border: black solid 1px;
+    padding: 3rem;
+    padding-bottom: 1.5rem;
+    padding-top: 1.5rem;
+    border-radius: 10px;
+}
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color:white;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(79deg, #4109b1, #1d8fbd 48%, #1abdaf);
+    border: 1px solid black;
+}
+
+
+.nonDisplay {
+    display: none;
+}
+
+.displayTokenBox {
+    display: inline;
+}
+
+.tokenText {
+    max-width: 30vw;
+    margin-bottom: 20px;
+    inline-size: 250px;
+    overflow-wrap: break-word;
+}
+

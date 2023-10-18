@@ -1,275 +1,150 @@
 //
-// Kích checkbox từng dòng
+// KĂ­ch checkbox tá»«ng dĂ²ng
 //
-
-function getString(ci) {
-    return ci.cells[1].innerHTML + " " + ci.cells[2].innerHTML + " " + ci.cells[3].innerHTML;
-}
-
-var chks = document.getElementsByName("choose");
-var chkslength = chks.length;
-let checkedList = [];
-for (let i = 0; i < chkslength; i++)
+var chks = document.getElementsByName("chk");
+function checkBoxChange() {
+	for (let i = 0; i < chks.length; i++)
 	chks[i].onchange = function() {
 			if (this.checked) {
-				this.parentNode.parentNode.classList.add("selected");
-                console.log(tbl);
-                console.log(i + 1);
-                checkedList.push(getString(tbl.rows[i + 1]));
-				let c = document.getElementsByName("choose");
+				this.parentNode.parentNode.classList.add("selectedr");
+				let c = document.getElementsByName("chk");
 				let j = 0;
-				for (; j < c.length; j++) 
+				for (; j < c.length; j++)
 					if (!c[j].checked) break;
-				if (j == c.length) document.getElementById("chooseAll").checked = true;
-				else document.getElementById("chooseAll").checked = false;
+				if (j == c.length) document.getElementById("chkall").checked = true;
+				else document.getElementById("chkall").checked = false;
 				document.querySelector("div.group-op").classList.remove("nodisplay");
 			} else {
-				this.parentNode.parentNode.classList.remove("selected");
-                checkedList.pop(getString(tbl.rows[i + 1]));
-				document.getElementById("chooseAll").checked = false;
-				let c = document.getElementsByName("choose");	
-				let j = 0;		
+				this.parentNode.parentNode.classList.remove("selectedr");
+				document.getElementById("chkall").checked = false;
+				let c = document.getElementsByName("chk");
+				let j = 0;
 				for (; j < c.length; j++)
 					if (c[j].checked) break;
 				if (j == c.length) document.querySelector("div.group-op").classList.add("nodisplay");
 				else document.querySelector("div.group-op").classList.remove("nodisplay");
-				
+
 			}
 	};
+}
+checkBoxChange();
 
 //
-// Kích check all
+// check all
 //
-document.getElementById("chooseAll").onchange = function() {
-	let c = document.getElementsByName("choose");			
-	for (let i = 0; i < c.length; i++) {
-		c[i].checked = this.checked;
-		if (c[i].checked) {
-            c[i].parentNode.parentNode.classList.add("selected");
-            if (! checkedList.includes(getString(tbl.rows[i + 1]))) checkedList.push(getString(tbl.rows[i + 1]));
+
+function checkAllBoxChange() {
+    document.getElementById("chkall").onchange = function() {
+        let c = document.getElementsByName("chk");
+        for (let i = 0; i < c.length; i++) {
+            c[i].checked = this.checked;
+            if (c[i].checked) c[i].parentNode.parentNode.classList.add("selectedr");
+            else c[i].parentNode.parentNode.classList.remove("selectedr");
         }
-		else {
-            c[i].parentNode.parentNode.classList.remove("selected");
-            if (checkedList.includes(getString(tbl.rows[i + 1]))) checkedList.pop(getString(tbl.rows[i + 1]));
+        if (this.checked) document.querySelector("div.group-op").classList.remove("nodisplay");
+        else document.querySelector("div.group-op").classList.add("nodisplay");
+    };
+}
+checkAllBoxChange();
+
+
+//
+//	XĂ³a
+//
+function delRow() {
+    document.querySelector(".group-op-delete").onclick = function() {
+        let c = document.getElementsByName("chk");
+        for (let i = c.length-1; i >= 0; i--)
+            if (c[i].checked) {
+                c[i].parentNode.parentNode.parentNode.removeChild(c[i].parentNode.parentNode);
+            }
+    };
+}
+
+delRow();
+
+let dir = ""; // chiều sắp xếp
+let tbl = document.getElementById("tbl"); //bảng được sắp xếp
+function sortColumn(col, cmp) {
+    let rows = tbl.rows;
+    for (let i = 1; i < rows.length; i++)
+        for (let j = i + 1; j < rows.length; j++)
+            if (cmp(rows[i].cells[col].innerHTML.toLowerCase(),
+                rows[j].cells[col].innerHTML.toLowerCase()) > 0
+            ) {
+                let tmp = rows[i].outerHTML;
+                rows[i].outerHTML = rows[j].outerHTML;
+                rows[j].outerHTML = tmp;
+            }
+};
+
+function parseDate(dateStr) {
+    let parts = dateStr.split("/");
+    if (parts.length === 3) {
+        let day = parseInt(parts[0], 10);
+        let month = parseInt(parts[1], 10);
+        let year = parseInt(parts[2], 10);
+        return new Date(year, month, day);
+    }
+    // Trả về null nếu ngày tháng năm không hợp lệ
+    return null;
+}
+
+let cmp = [];
+cmp.push((name1, name2) => {
+    let arr1 = name1.split(" ");
+    let arr2 = name2.split(" ");
+    let res = 0;
+    for (let i = arr1.length - 1, j = arr2.length - 1; i >= 0 && j >= 0; --i, --j) {
+        let c = arr1[i].localeCompare(arr2[j]);
+        if (c !== 0) {
+            res = c;
+            break;
         }
-	}
-	if (this.checked) document.querySelector("div.group-op").classList.remove("nodisplay");
-	else document.querySelector("div.group-op").classList.add("nodisplay");
-};
+    }
+    if (res === 0)
+        res = arr1.length < arr2.length ? -1 : 1;
+    return dir === "asc" ? res : -res;
+});
 
+cmp.push((date1, date2) => {
+    let res = parseDate(date1) < parseDate(date2) ? -1 : 1;
+    return dir === "asc" ? res : -res;
+});
 
-//
-//	Xóa
-//
-document.querySelector(".group-op-delete").onclick = function() {
-	let c = document.getElementsByName("choose");	 		
-	for (let i = c.length-1; i >= 0; i--)
-		if (c[i].checked) {
-            checkedList.pop(getString(tbl.rows[i + 1]));
-            c[i].parentNode.parentNode.parentNode.removeChild(c[i].parentNode.parentNode);
+cmp.push((str1, str2) => {
+    let res = str1.localeCompare(str2);
+    return dir === "asc" ? res : -res;
+});
 
-		}
+function main() {
+    let headerCells = tbl.rows[0].cells;
+    dir = "desc";
+    for (let i = 1; i < headerCells.length; ++i)
+        headerCells[i].onclick = () => {
+            headerCells[1].classList.remove(dir);
+            headerCells[2].classList.remove(dir);
+            headerCells[3].classList.remove(dir);
+            dir = (dir == "asc" ? "desc" : "asc");
+            col = i;
+            sortColumn(i, cmp[i - 1]);
+            headerCells[1].classList.remove(dir);
+            headerCells[2].classList.remove(dir);
+            headerCells[3].classList.remove(dir);
 
-    chks = [];
-    chks = document.getElementsByName("choose");
-    console.log(chks.length);
-    tbl = document.getElementById("tbl");
-    console.log(tbl);
-    chkslength = chks.length;
+            headerCells[i].classList.add(dir);
 
-};
-
-
-var col = 0; // cột được sắp xếp
-var dir = ""; // chiều sắp xếp
-var tbl = document.getElementById("tbl"); //bảng được sắp xếp
-
-// xử lý sự kiện kích chuột trên ô tiêu đề cột "Họ tên"
-tbl.rows[0].cells[1].onclick = function() {
-	// Bỏ biểu thị cột đang được sắp xếp (nếu có)
-	if (col == 1) tbl.rows[0].cells[1].classList.remove(dir);
-	else if (col == 2) tbl.rows[0].cells[2].classList.remove(dir);
-    else if (col == 3) tbl.rows[0].cells[3].classList.remove(dir);
-	// Cột sẽ được sắp xếp là cột 1
-	if (col == 1) {
-		// cột 1 đã được sắp xếp, đảo chiều
-		dir = (dir == "asc" ? "desc" : "asc");
-	} else {
-		col = 1;
-		dir = "asc";
-	}
-	//thêm biểu thị cột được sắp xếp
-	this.classList.add(dir);
-	//sắp xếp
-	tblSortName();
-};
-
-// xử lý sự kiện kích chuột trên ô tiêu đề cột "Ngày sinh"
-tbl.rows[0].cells[2].onclick = function() {
-	//bỏ biểu thị cột đang được sắp xếp (nếu có)
-	if (col == 1) tbl.rows[0].cells[1].classList.remove(dir);
-	else if (col == 2) tbl.rows[0].cells[2].classList.remove(dir);
-	// cột sẽ được sắp xếp là cột 2
-	if (col == 2) {
-		// cột 2 đã được sắp xếp, đảo chiều
-		dir = (dir == "asc" ? "desc" : "asc");
-	} else {
-		col = 2;
-		dir = "asc";
-	}
-	//thêm biểu thị cột được sắp xếp
-	this.classList.add(dir);
-	//sắp xếp
-	tblSortBirth();
-};
-
-// xử lý sự kiện kích chuột trên ô tiêu đề cột "Giới tính"
-tbl.rows[0].cells[3].onclick = function() {
-	if (col == 1) tbl.rows[0].cells[1].classList.remove(dir);
-	else if (col == 2) tbl.rows[0].cells[2].classList.remove(dir);
-    else if (col == 3) tbl.rows[0].cells[3].classList.remove(dir);
-	if (col == 3) {
-		dir = (dir == "asc" ? "desc" : "asc");
-	} else {
-		col = 3;
-		dir = "asc";
-	}
-	this.classList.add(dir);
-	tblSortGender();
-};
-
-
-function displayChecked() {
-
-    let c = document.getElementsByName("choose");
-    for (let i = 0; i < c.length; i++) {
-        if (checkedList.includes(getString(tbl.rows[i + 1]))) {
-            c[i].parentNode.parentNode.classList.add("selected");
-            c[i].checked = true;
             
+            let selectedCells = document.querySelectorAll(".selectedr td");
+            selectedCells.forEach((td) => {
+                let checkbox = td.firstChild;
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            });
+
+            checkBoxChange();
         }
-    }
 }
 
-function priorName(a, b) {
-    let la = a.split(" ").length;
-    let lb = b.split(" ").length;
-    if (a.split(" ")[la - 1].toLowerCase() < b.split(" ")[lb - 1].toLowerCase()){
-        return -1;
-    } else if (a.split(" ")[la - 1].toLowerCase() > b.split(" ")[lb - 1].toLowerCase()) {
-        return 1;
-    } else if (a.split(" ")[la - 3].toLowerCase() < b.split(" ")[lb - 3].toLowerCase()) {
-        return -1;
-
-    } else if (a.split(" ")[la - 3].toLowerCase() > b.split(" ")[lb - 3].toLowerCase()) {
-        return 1;
-    } else if (a.split(" ")[1].toLowerCase() < b.split(" ")[1].toLowerCase()) {
-        return -1;
-    } else return 1;
-}
-
-
-function tblSortName() {
-    // console.log(dir);
-    let c = document.getElementsByName("choose");
-    for (let i = 0; i < c.length; i++) {
-        c[i].parentNode.parentNode.classList.remove("selected");
-        c[i].checked = false;
-    }
-    console.log(checkedList);
-    let rows = tbl.rows;
-    for (let i = 1; i < rows.length; i++) {
-        for (let j = i + 1; j < rows.length; j++) {
-            let cur = priorName(rows[i].cells[col].innerHTML,rows[j].cells[col].innerHTML);
-            // console.log(i, j, dir, cur);
-            if ((dir == "asc" && cur == -1) || (dir == "desc" && cur == 1)) {
-                tmp = rows[i].cells[1].innerHTML;
-                rows[i].cells[1].innerHTML = rows[j].cells[1].innerHTML;
-                rows[j].cells[1].innerHTML = tmp;
-
-                tmp = rows[i].cells[2].innerHTML;
-                rows[i].cells[2].innerHTML = rows[j].cells[2].innerHTML;
-                rows[j].cells[2].innerHTML = tmp;
-
-                tmp = rows[i].cells[3].innerHTML;
-                rows[i].cells[3].innerHTML = rows[j].cells[3].innerHTML;
-                rows[j].cells[3].innerHTML = tmp;
-                
-            }
-        }
-    }
-
-    displayChecked();
-}
-
-
-
-function tblSortGender() {
-	var rows = tbl.rows;
-	for (var i = 1; i < rows.length; i++) {
-		for (var j = i+1; j < rows.length; j++)  
-			if ((dir == "asc" && rows[i].cells[col].innerHTML.toLowerCase() > 
-					rows[j].cells[col].innerHTML.toLowerCase()) || 
-				(dir == "desc" && rows[i].cells[col].innerHTML.toLowerCase() < 
-					rows[j].cells[col].innerHTML.toLowerCase())
-				)
-			{
-				//hoán vị	
-				tmp = rows[i].cells[1].innerHTML;
-				rows[i].cells[1].innerHTML = rows[j].cells[1].innerHTML;
-				rows[j].cells[1].innerHTML = tmp;
-
-				tmp = rows[i].cells[2].innerHTML;
-				rows[i].cells[2].innerHTML = rows[j].cells[2].innerHTML;
-				rows[j].cells[2].innerHTML = tmp;
-
-                tmp = rows[i].cells[3].innerHTML;
-				rows[i].cells[3].innerHTML = rows[j].cells[3].innerHTML;
-				rows[j].cells[3].innerHTML = tmp;
-			}
-    }
-    displayChecked();
-};
-
-function priorBirth(a, b) {
-    if (Number(a.split("/")[2]) < Number(b.split("/")[2])){
-        return -1;
-    } else if (Number(a.split("/")[2]) > Number(b.split("/")[2])) {
-        return 1;
-    } else if (Number(a.split("/")[1]) < Number(b.split("/")[1])) {
-        return -1;
-    } else if (Number(a.split("/")[1]) > Number(b.split("/")[1])) {
-        return 1;
-    } else if (Number(a.split("/")[0]) < Number(b.split("/")[0])) {
-        return -1;
-    } else return 1;
-}
-
-
-function tblSortBirth() {
-    // console.log(dir);
-    let rows = tbl.rows;
-    for (let i = 1; i < rows.length; i++) {
-        for (let j = i + 1; j < rows.length; j++) {
-            let cur = priorBirth(rows[i].cells[col].innerHTML,rows[j].cells[col].innerHTML);
-            // console.log(i, j, dir, cur);
-            if ((dir == "asc" && cur == -1) || (dir == "desc" && cur == 1)) {
-                tmp = rows[i].cells[1].innerHTML;
-                rows[i].cells[1].innerHTML = rows[j].cells[1].innerHTML;
-                rows[j].cells[1].innerHTML = tmp;
-
-                tmp = rows[i].cells[2].innerHTML;
-                rows[i].cells[2].innerHTML = rows[j].cells[2].innerHTML;
-                rows[j].cells[2].innerHTML = tmp;
-
-                tmp = rows[i].cells[3].innerHTML;
-                rows[i].cells[3].innerHTML = rows[j].cells[3].innerHTML;
-                rows[j].cells[3].innerHTML = tmp;
-
-
-
-            }
-        }
-    }
-    displayChecked();
-}
+main()

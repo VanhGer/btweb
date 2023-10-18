@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register and Login</title>
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+    <div class = "container">
+        <form id = "register" class = "register">
+            <div> Register</div>
+            <label for = "username">username: </label>
+            <input type = "text" id = "username" name = "username"> <br> <br>
+            <label for = "password"> password: </label>
+            <input type="password" id = "password" name = "password"> <br> <br>
+            <input type="submit" value="submit"> 
+        </form>
+    
+        <div  id = "tokenBox" class = "nonDisplay">
+            <div> Your token: </div>
+            <div id = "displayToken" class = "tokenText">
+                
+            </div>
+        </div>
+    
+        <form id = "login" class = "login">
+            <div>Login</div>
+            <label for = "token">token: </label>
+            <input type = "text" id = "token" name = "token"> <br> <br>
+            <input type="submit" value="submit"> 
+        </form>
+    </div>
+    
+
+    
+
+    
+    <script>
+        function handleRegister(event) {
+            event.preventDefault();
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            // let token = "";
+            //console.log(username);
+            fetch("http://127.0.0.1:3000/register", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            }).then(res => res.json())
+            .then(res => {
+                let displayToken = document.getElementById("displayToken");
+                displayToken.innerText = res.token;
+                let tokenBox = document.getElementById("tokenBox");
+                tokenBox.classList.remove("nonDisplay");
+                tokenBox.classList.add("displayTokenBox");
+            })
+            // console.log(token);
+        }
+
+        const registerForm = document.getElementById("register");
+        registerForm.addEventListener('submit', handleRegister);
+
+
+
+        function handleLogin(event) {
+            event.preventDefault();
+            let token = document.getElementById("token").value;
+         
+           
+            fetch("http://127.0.0.1:3000/login", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    token
+                })
+            }).then(res => res.json())
+            .then(res => {
+
+                if (res.result === "ok") {
+                    alert(`Dang nhap thanh cong. Hello: ${res.username}`);
+                } else {
+                    alert("Dang nhap khong thanh cong. Hay kiem tra lai Token")
+                }
+            })
+            
+        }
+
+        const loginForm = document.getElementById("login");
+        loginForm.addEventListener('submit', handleLogin);
+
+    </script>
+
+
+</body>
+</html>

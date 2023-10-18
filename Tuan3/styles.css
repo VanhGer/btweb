@@ -6,35 +6,37 @@
 	border: solid 1px #000000;
 }
 #tbl thead {
-	background-color:#51f7ee;
+	background-color:aqua;
 }
-.oddr {
-	background-color:#c9c6c6;
+#tbl tr.oddr {
+	background-color:#dfdfdf;
 }
-.evenr {
+#tbl tr.evenr {
 	background-color:#f0f0f0;
 }
-#tbl tr.selected {
-    background-color:rgb(226, 226, 116);
-}
-.nodisplay {
-    display:none;
+#tbl tr.selectedr {background-color:yellow;}
+.nodisplay {display:none;}
+div.group-op-container {height:30px;}
+
+table.sortable th.sortcol {
+	cursor:pointer;
 }
 
-th.sortcol span.arrow::after {
+table.sortable th.sortcol span.arrow::after {
 	content: "\2195";
 }
 
-th.asc span.arrow::after {
+table.sortable th.asc span.arrow::after {
 	content: "\2191";
     background-color: yellow;
     color: red;
     font-weight: bold;
 }
 
-th.desc span.arrow::after {
+table.sortable th.desc span.arrow::after {
 	content: "\2193";
     background-color: yellow;
     color: red;
     font-weight: bold;
 }
+
