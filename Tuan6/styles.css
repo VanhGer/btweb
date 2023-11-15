@@ -1,0 +1,38 @@
+button {
+    margin-left: 20px;
+}
+
+.gridContainer {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.gridRow {
+    display: flex;
+}
+
+.cell {
+    border: 1px solid rgb(75, 69, 69);
+    width: 20px;
+    height: 20px;
+}
+
+.white {
+    background-color: white;
+}
+
+.black {
+    background-color: black;
+}
+
+.red {
+    background-color: red;
+}
+
+.green {
+    background-color: rgb(2, 184, 2);
+}
+
+.yellow {
+    background-color: yellow;
+}
